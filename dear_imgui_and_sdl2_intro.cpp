@@ -158,6 +158,9 @@ int main(int argc, char* argv[]) {
 	int x_scale = 60;
 	int y_scale = 50;
 
+	// rectangle color properties
+	ImVec4 rect_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
 	while (true)
 	{
 
@@ -178,24 +181,31 @@ int main(int argc, char* argv[]) {
 		ImGui::NewFrame();
 
 		ImGui::Begin("test");
-		ImGui::Text("position controls");
-		ImGui::SliderInt("x_pos", &x_pos, 0, SCREEN_WIDTH);
-		ImGui::SliderInt("y_pos", &y_pos, 0, SCREEN_HEIGHT);
-		ImGui::Text("scale controls");
-		ImGui::SliderInt("x_scale", &x_scale, 0, 500);
-		ImGui::SliderInt("y_scale", &y_scale, 0, 500);
-		ImGui::End();
+		{
+			ImGui::Text("Color");
+			ImGui::ColorEdit4("rect color", (float*)&rect_color);
+			ImGui::Text("position controls");
+			ImGui::SliderInt("x_pos", &x_pos, 0, SCREEN_WIDTH);
+			ImGui::SliderInt("y_pos", &y_pos, 0, SCREEN_HEIGHT);
+			ImGui::Text("scale controls");
+			ImGui::SliderInt("x_scale", &x_scale, 0, 500);
+			ImGui::SliderInt("y_scale", &y_scale, 0, 500);
+			ImGui::End();
 
-		ImGui::Begin("rect");
-		ImGui::Image((void*)texture, ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT));
-		ImGui::End();
+			ImGui::Begin("rect");
+			ImGui::Image((void*)texture, ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+			ImGui::End();
+		}
 
 		// Update the buffer
 		//setPixel(x_pos, y_pos, 255, 255, 255, 255);
 		rect(
 			x_pos, y_pos,
 			x_scale, y_scale,
-			255,255,255,255
+			(Uint8)(rect_color.x * 255),
+			(Uint8)(rect_color.y * 255),
+			(Uint8)(rect_color.z * 255),
+			(Uint8)(rect_color.w * 255)
 		);
 
 		SDL_UpdateTexture(texture, NULL, buffer, SCREEN_WIDTH * sizeof(Uint32));
